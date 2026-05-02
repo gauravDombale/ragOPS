@@ -1,0 +1,10 @@
+{
+  "title": "Cost Accounting",
+  "schemaVersion": 39,
+  "version": 1,
+  "panels": [
+    {"type":"timeseries","title":"Average Cost per Request","targets":[{"expr":"rate(rag_cumulative_cost_usd_total[5m]) / rate(rag_requests_total[5m])"}]},
+    {"type":"timeseries","title":"Token Split","targets":[{"expr":"rate(rag_tokens_total{token_type=\"input\"}[5m])"},{"expr":"rate(rag_tokens_total{token_type=\"output\"}[5m])"},{"expr":"rate(rag_tokens_total{token_type=\"cached\"}[5m])"}]},
+    {"type":"timeseries","title":"Prompt Cache Efficiency","targets":[{"expr":"rate(rag_tokens_total{token_type=\"cached\"}[5m]) / rate(rag_tokens_total{token_type=\"input\"}[5m])"}]}
+  ]
+}

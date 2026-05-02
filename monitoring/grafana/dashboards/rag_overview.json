@@ -1,0 +1,11 @@
+{
+  "title": "RAG Overview",
+  "schemaVersion": 39,
+  "version": 1,
+  "panels": [
+    {"type":"timeseries","title":"RPS","targets":[{"expr":"sum(rate(rag_requests_total[1m]))"}]},
+    {"type":"timeseries","title":"Error Rate %","targets":[{"expr":"100 * sum(rate(rag_requests_total{status=\"error\"}[5m])) / sum(rate(rag_requests_total[5m]))"}]},
+    {"type":"timeseries","title":"P95 Latency","targets":[{"expr":"histogram_quantile(0.95, sum(rate(rag_request_latency_seconds_bucket[5m])) by (le))"}]},
+    {"type":"timeseries","title":"Cost per Hour","targets":[{"expr":"rate(rag_cumulative_cost_usd_total[1h]) * 3600"}]}
+  ]
+}

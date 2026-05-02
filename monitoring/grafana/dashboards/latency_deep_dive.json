@@ -1,0 +1,10 @@
+{
+  "title": "Latency Deep Dive",
+  "schemaVersion": 39,
+  "version": 1,
+  "panels": [
+    {"type":"timeseries","title":"P50 by Stage","targets":[{"expr":"histogram_quantile(0.50, sum(rate(rag_stage_latency_seconds_bucket[5m])) by (le, stage))"}]},
+    {"type":"timeseries","title":"P95 by Stage","targets":[{"expr":"histogram_quantile(0.95, sum(rate(rag_stage_latency_seconds_bucket[5m])) by (le, stage))"}]},
+    {"type":"timeseries","title":"P99 by Stage","targets":[{"expr":"histogram_quantile(0.99, sum(rate(rag_stage_latency_seconds_bucket[5m])) by (le, stage))"}]}
+  ]
+}
