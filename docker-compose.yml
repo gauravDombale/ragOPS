@@ -7,12 +7,11 @@ services:
     environment:
       WEAVIATE_HOST: weaviate
       WEAVIATE_PORT: 8080
-      OTEL_EXPORTER_OTLP_ENDPOINT: http://jaeger:4317
-      LANGFUSE_HOST: http://langfuse-server:3000
+      OTEL_EXPORTER_OTLP_ENDPOINT: ${OTEL_EXPORTER_OTLP_ENDPOINT:-}
+      LANGFUSE_HOST: ${LANGFUSE_HOST:-}
+      LANGFUSE_BASE_URL: ${LANGFUSE_HOST:-}
     depends_on:
       - weaviate
-      - langfuse-server
-      - jaeger
     networks: [obs-net]
 
   weaviate:
@@ -44,6 +43,7 @@ services:
         condition: service_healthy
     ports:
       - "13000:3000"
+    profiles: ["obs"]
     environment: &langfuse_env
       NEXTAUTH_URL: http://localhost:13000
       DATABASE_URL: postgresql://langfuse:langfuse@langfuse-db:5432/langfuse
@@ -81,6 +81,7 @@ services:
   langfuse-worker:
     image: langfuse/langfuse-worker:3
     restart: always
+    profiles: ["obs"]
     depends_on:
       langfuse-db:
         condition: service_healthy
@@ -97,6 +98,7 @@ services:
   langfuse-db:
     image: postgres:15
     restart: always
+    profiles: ["obs"]
     environment:
       POSTGRES_USER: langfuse
       POSTGRES_PASSWORD: langfuse
@@ -115,6 +117,7 @@ services:
   clickhouse:
     image: clickhouse/clickhouse-server:24.8
     restart: always
+    profiles: ["obs"]
     user: "101:101"
     environment:
       CLICKHOUSE_DB: default
@@ -133,6 +136,7 @@ services:
   redis:
     image: redis:7
     restart: always
+    profiles: ["obs"]
     command: ["redis-server", "--requirepass", "myredissecret", "--maxmemory-policy", "noeviction"]
     healthcheck:
       test: ["CMD", "redis-cli", "-a", "myredissecret", "ping"]
@@ -146,6 +150,7 @@ services:
   minio:
     image: cgr.dev/chainguard/minio
     restart: always
+    profiles: ["obs"]
     entrypoint: sh
     command: -c 'mkdir -p /data/langfuse && minio server --address ":9000" --console-address ":9001" /data'
     environment:
@@ -162,6 +167,7 @@ services:
 
   jaeger:
     image: jaegertracing/all-in-one:1.57
+    profiles: ["obs"]
     ports:
       - "16686:16686"
       - "4317:4317"
@@ -172,6 +178,7 @@ services:
 
   prometheus:
     image: prom/prometheus:v2.51.0
+    profiles: ["obs"]
     ports:
       - "19090:9090"
     volumes:
@@ -186,6 +193,7 @@ services:
 
   grafana:
     image: grafana/grafana:10.4.0
+    profiles: ["obs"]
     ports:
       - "13001:3000"
     environment:

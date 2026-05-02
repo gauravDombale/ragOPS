@@ -5,7 +5,7 @@ from fastapi import APIRouter, HTTPException
 
 from src.api.schemas import QueryRequest, QueryResponse
 from src.config import settings
-from src.observability.langfuse_compat import langfuse_context, observe
+from src.observability.langfuse_compat import observe
 from src.observability.metrics import ACTIVE_REQUESTS, REQUEST_LATENCY, REQUEST_TOTAL
 from src.pipeline.graph import rag_pipeline
 
@@ -17,14 +17,6 @@ router = APIRouter()
 async def query_endpoint(request: QueryRequest):
     trace_id = str(uuid.uuid4())
     session_id = request.session_id or str(uuid.uuid4())
-
-    langfuse_context.update_current_trace(
-        name="rag_query",
-        session_id=session_id,
-        user_id=request.user_id,
-        tags=["production"],
-        metadata={"query_length": len(request.query)},
-    )
 
     ACTIVE_REQUESTS.inc()
     start = time.perf_counter()

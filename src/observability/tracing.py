@@ -20,9 +20,10 @@ def init_tracing() -> trace.Tracer:
             "service.version": settings.app_version,
         }
     )
-    exporter = OTLPSpanExporter(endpoint=settings.otel_exporter_otlp_endpoint, insecure=True)
     provider = TracerProvider(resource=resource)
-    provider.add_span_processor(BatchSpanProcessor(exporter))
+    if settings.otel_exporter_otlp_endpoint:
+        exporter = OTLPSpanExporter(endpoint=settings.otel_exporter_otlp_endpoint, insecure=True)
+        provider.add_span_processor(BatchSpanProcessor(exporter))
     trace.set_tracer_provider(provider)
     HTTPXClientInstrumentor().instrument()
     return trace.get_tracer(settings.otel_service_name)

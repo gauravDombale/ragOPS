@@ -6,8 +6,22 @@ Production-grade RAG monitoring and observability system using FastAPI, LangGrap
 
 ```bash
 cp .env.example .env
-docker compose up -d
+docker compose up -d api weaviate
 uvicorn src.api.main:app --reload
+```
+
+## Low-resource mode (recommended on laptop)
+
+Uses only remote OpenAI models and no local reranker model:
+- `LLM_MODEL=gpt-4o-mini`
+- `EMBEDDING_MODEL=text-embedding-3-small`
+- `OTEL_EXPORTER_OTLP_ENDPOINT=` (disabled)
+- `LANGFUSE_HOST=` (disabled)
+
+## Full observability stack (optional)
+
+```bash
+docker compose --profile obs up -d
 ```
 
 ## Run evals

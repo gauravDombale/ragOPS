@@ -16,7 +16,6 @@ ragas
 datasets
 weaviate-client
 openai
-sentence-transformers
 pydantic-settings
 python-dotenv
 locust
