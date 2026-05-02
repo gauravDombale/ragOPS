@@ -1,0 +1,11 @@
+[
+  {
+    "question": "What is the refund policy for enterprise customers?",
+    "answer": "Enterprise customers receive a 30-day full refund guarantee with no questions asked.",
+    "contexts": [
+      "Enterprise customers are entitled to a full refund within 30 days of purchase. No documentation is required for refund requests under $10,000.",
+      "Refund processing takes 5-7 business days after approval."
+    ],
+    "ground_truth": "Enterprise customers get a 30-day full refund guarantee with processing in 5-7 business days."
+  }
+]
